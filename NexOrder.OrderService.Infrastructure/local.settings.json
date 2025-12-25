@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "SystemDbConnectionString": "Server=localhost\\SQLEXPRESS;Database=nexorder-orders;Trusted_Connection=True;TrustServerCertificate=true"
+  }
+}
