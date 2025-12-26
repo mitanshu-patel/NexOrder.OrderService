@@ -35,6 +35,21 @@ jobs:
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
           dotnet build --configuration Release --output ./output
           popd
+
+      - name: Clear NuGet cache
+        run: dotnet nuget locals all --clear
+
+      - name: Install EF Core CLI
+        run: dotnet tool install --global dotnet-ef --version 8.0.22
+
+      - name: Apply EF Core migrations
+        run: |
+          dotnet ef database update \
+            --project NexOrder.OrderService.Infrastructure \
+            --startup-project NexOrder.OrderService.Infrastructure \
+            --context OrdersContext
+        env:
+          ConnectionStrings__SystemDbConnectionString: ${{ secrets.SQL_CONN }}
       
       - name: Login to Azure
         uses: azure/login@v2
@@ -50,4 +65,5 @@ jobs:
           app-name: 'NexOrder-OrderService'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+
           
