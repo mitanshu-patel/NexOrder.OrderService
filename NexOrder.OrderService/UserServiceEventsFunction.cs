@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.WebJobs;
+﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NexOrder.OrderService.Application.Common;
 using NexOrder.OrderService.Application.Users.ManageRemoteUser;
@@ -25,7 +25,7 @@ namespace NexOrder.OrderService
             this._logger = _logger;
         }
 
-        [FunctionName("UserServiceEventsFunction")]
+        [Function("UserServiceEventsFunction")]
         public void Run([ServiceBusTrigger("userserviceevents", "userserviceorder", Connection = "ServiceBusConnectionString")] string mySbMsg)
         {
             var response = JsonSerializer.Deserialize<MessageResult>(mySbMsg);

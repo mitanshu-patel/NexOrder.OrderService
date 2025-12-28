@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.WebJobs;
+﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NexOrder.OrderService.Application.Common;
 using NexOrder.OrderService.Application.Products.ManageRemoteProduct;
@@ -25,14 +25,14 @@ namespace NexOrder.OrderService
             this._logger = _logger;
         }
 
-        [FunctionName("ProductServiceEventsFunction")]
-        public void Run([ServiceBusTrigger("productserviceevents", "productserviceorder", Connection = "ServiceBusConnectionString")] string mySbMsg)
+        [Function("ProductServiceEventsFunction")]
+        public async Task Run([ServiceBusTrigger("productserviceevents", "productserviceorder", Connection = "ServiceBusConnectionString")] string mySbMsg)
         {
             var response = JsonSerializer.Deserialize<MessageResult>(mySbMsg);
             if (response.FullName == typeof(ProductUpdated).FullName)
             {
                 var request = JsonSerializer.Deserialize<ProductUpdated>(response.Data.ToString());
-                this.mediator.SendAsync<ManageRemoteProductCommand, CustomResponse<ManageRemoteProductResult>>(new ManageRemoteProductCommand(request));
+                await this.mediator.SendAsync<ManageRemoteProductCommand, CustomResponse<ManageRemoteProductResult>>(new ManageRemoteProductCommand(request));
                 this._logger.LogInformation($"C# ServiceBus topic trigger function processed message: {mySbMsg}");
             }
         }
