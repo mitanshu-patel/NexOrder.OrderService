@@ -26,14 +26,14 @@ namespace NexOrder.OrderService
         }
 
         [Function("UserServiceEventsFunction")]
-        public void Run([ServiceBusTrigger("userserviceevents", "userserviceorder", Connection = "ServiceBusConnectionString")] string mySbMsg)
+        public async Task Run([ServiceBusTrigger("userserviceevents", "userserviceorder", Connection = "ServiceBusConnectionString")] string mySbMsg)
         {
             var response = JsonSerializer.Deserialize<MessageResult>(mySbMsg);
 
             if (response.FullName == typeof(UserUpdated).FullName)
             {
                 var request = JsonSerializer.Deserialize<UserUpdated>(response.Data.ToString());
-                this.mediator.SendAsync<ManageRemoteUserCommand, CustomResponse<ManageRemoteUserResult>>(new ManageRemoteUserCommand(request));
+                await this.mediator.SendAsync<ManageRemoteUserCommand, CustomResponse<ManageRemoteUserResult>>(new ManageRemoteUserCommand(request));
                 this._logger.LogInformation($"C# ServiceBus topic trigger function processed message: {mySbMsg}");
             }
         }
