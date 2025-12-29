@@ -1,4 +1,4 @@
-# NexOrder.ProductService
+# NexOrder.OrderService
 
 NexOrder.OrderService is a backend microservice responsible for **order creation, order lifecycle management, and coordination between products and users** in the NexOrder system.  
 It is built using **Azure Functions**, follows **Clean Architecture principles**, and communicates with other services using **Azure Service Bus**.
