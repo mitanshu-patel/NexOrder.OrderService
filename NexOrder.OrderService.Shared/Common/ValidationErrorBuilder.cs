@@ -17,12 +17,22 @@ namespace NexOrder.OrderService.Shared.Common
 
         public ValidationErrorBuilder AddPropertyError(string propertyName, string errorMessage)
         {
+            if (!errors.ContainsKey(propertyName))
+            {
+                errors[propertyName] = new List<string>();
+            }
+
             errors[propertyName].Add(errorMessage);
             return this;
         }
 
         public ValidationErrorBuilder AddObjectError(string errorMessage)
         {
+            if (!errors.ContainsKey(string.Empty))
+            {
+                errors[string.Empty] = new List<string>();
+            }
+
             errors[string.Empty].Add(errorMessage);
             return this;
         }
