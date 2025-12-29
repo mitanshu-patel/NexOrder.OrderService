@@ -47,18 +47,19 @@ namespace NexOrder.OrderService.Application.Orders.CreateOrder
                     var productStocks = productStockDetails.Select(v => v.ProductStock);
                     var productStock = productStocks.FirstOrDefault(p => p.ProductId == item.ProductId);
                     var updatedQuantity = productStock != null ? productStock.AvailableQuantity - item.Quantity : -1;
+                    var productIndex = command.Criteria.OrderItems.IndexOf(item);
 
                     if (productStock == null)
                     {
                         this.logger.LogWarning("CreateOrderHandler: ProductId:{productId} not found in stock.", item.ProductId);
-                        validationBuilder.AddPropertyError(nameof(item.ProductId), "Product not found in stock.");
+                        validationBuilder.AddPropertyError($"OrderItems[{productIndex}].ProductId", "Product not found in stock.");
                         continue;
                     }
 
                     if (updatedQuantity < 0)
                     {
                         this.logger.LogWarning("CreateOrderHandler: Insufficient stock for ProductId:{productId}. Requested:{requested}, Available:{available}", item.ProductId, item.Quantity, productStock?.AvailableQuantity ?? 0);
-                        validationBuilder.AddPropertyError(nameof(item.ProductId), $"Insufficient stock. Requested:{item.Quantity}, Available:{productStock?.AvailableQuantity ?? 0}");
+                        validationBuilder.AddPropertyError($"OrderItems[{productIndex}].ProductId", $"Insufficient stock. Requested:{item.Quantity}, Available:{productStock?.AvailableQuantity ?? 0}");
                         continue;
                     }
 
