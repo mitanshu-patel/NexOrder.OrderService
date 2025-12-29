@@ -34,6 +34,11 @@ namespace NexOrder.OrderService.Infrastructure
             return dbContext.Orders.AsQueryable();
         }
 
+        public IQueryable<ProductStock> GetProductStocks()
+        {
+            return dbContext.ProductStocks.AsQueryable();
+        }
+
         public IQueryable<RemoteProduct> GetRemoteProducts()
         {
             return dbContext.RemoteProducts.AsQueryable();

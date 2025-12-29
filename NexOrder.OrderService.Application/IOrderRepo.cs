@@ -25,5 +25,7 @@ namespace NexOrder.OrderService.Application
         public IQueryable<RemoteUser> GetRemoteUsers();
 
         public Task SaveProductStockAsync(ProductStock productStock);
+
+        public IQueryable<ProductStock> GetProductStocks();
     }
 }

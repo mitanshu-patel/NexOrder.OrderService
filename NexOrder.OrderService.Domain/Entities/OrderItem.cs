@@ -18,6 +18,8 @@ namespace NexOrder.OrderService.Domain.Entities
 
         public int ProductId { get; set; }
 
+        public int Quantity { get; set; }
+
         public RemoteProduct Product { get; set; }
     }
 }
