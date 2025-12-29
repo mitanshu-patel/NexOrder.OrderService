@@ -27,6 +27,15 @@ namespace NexOrder.OrderService.Application.ProductStocks.SaveProductStock
             {
                 this.logger.LogDebug("SaveProductStockHandler : Saving product stock for ProductId:{productId}", command.ProductStockCriteria.ProductId);
                 var productStockId = command.ProductStockId ?? 0;
+                var productExists = await this.orderRepo.GetRemoteProducts()
+                    .AnyAsync(p => p.Id == command.ProductStockCriteria.ProductId);
+
+                if (!productExists)
+                {
+                    this.logger.LogWarning("SaveProductStockHandler : Product not found for ProductId:{productId}", command.ProductStockCriteria.ProductId);
+                    return CustomHttpResult.NotFound<SaveProductStockResult>("Product not found for the given ProductId.");
+                }
+
                 if (command.ProductStockId.HasValue)
                 {
                     var productStock = await this.orderRepo.GetProductStocks().Where(v => v.Id == command.ProductStockId).FirstOrDefaultAsync();

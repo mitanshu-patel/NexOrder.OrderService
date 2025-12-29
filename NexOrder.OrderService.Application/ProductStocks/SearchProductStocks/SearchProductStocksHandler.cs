@@ -3,6 +3,7 @@ using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NexOrder.OrderService.Application.Common;
+using NexOrder.OrderService.Application.ProductStocks.Common.DTOs;
 using NexOrder.OrderService.Application.ProductStocks.SearchProductStocks.DTOs;
 using NexOrder.OrderService.Shared.Common;
 using System;
@@ -40,7 +41,7 @@ namespace NexOrder.OrderService.Application.ProductStocks.SearchProductStocks
 
                 var productStocksList = await productStocks
                                 .OrderByDescending(v => v.LastUpdatedAtUtc)
-                                .Select(v => new ProductStocksDto(v.Id, v.Product.Name, v.Product.Price, v.AvailableQuantity))
+                                .Select(v => new ProductStockBaseDto(v.Id, v.Product.Name, v.Product.Price, v.AvailableQuantity))
                                 .Skip(command.PageIndex * command.PageSize)
                                 .Take(command.PageSize)
                                 .ToListAsync();

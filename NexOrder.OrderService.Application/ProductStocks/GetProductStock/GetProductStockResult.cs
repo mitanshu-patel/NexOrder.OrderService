@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NexOrder.OrderService.Application.ProductStocks.SearchProductStocks
+namespace NexOrder.OrderService.Application.ProductStocks.GetProductStock
 {
-    public record SearchProductStocksResult(List<ProductStockBaseDto> ProductStocks, int TotalRecords);
+    public record GetProductStockResult(ProductStockBaseDto StockDetails);
 }

@@ -27,7 +27,7 @@ namespace NexOrder.OrderService.Application.Orders.GetOrder
         {
             try
             {
-                this.logger.LogDebug("GetOrderHandler: Initializing handler for OrderId:{orderId}", orderRepo);
+                this.logger.LogDebug("GetOrderHandler: Initializing handler for OrderId:{orderId}", command.OrderId);
                 var order = await this.orderRepo.GetOrders().Where(v => v.Id == command.OrderId).Select(v => new OrderDetailsDto
                 {
                     CreatedAtUtc = v.CreatedAtUtc,
