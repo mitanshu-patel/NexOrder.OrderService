@@ -28,4 +28,10 @@
     <ProjectReference Include="..\NexOrder.OrderService.Domain\NexOrder.OrderService.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="local.settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
