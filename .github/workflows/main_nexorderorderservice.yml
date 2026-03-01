@@ -59,7 +59,7 @@ jobs:
       run: |
         dotnet ef database update \
           --project NexOrder.OrderService.Infrastructure \
-          --startup-project NexOrder.OrderService \
+          --startup-project NexOrder.OrderService.Infrastructure \
           --connection "$DB_CONNECTION"
 
   deploy:
@@ -88,4 +88,5 @@ jobs:
           images: 'practiceregistry.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_1C35C486AC97439392A4D7B6F7727E70 }}/nexorderorderservice:${{ github.sha }}'
 
           
+
 
