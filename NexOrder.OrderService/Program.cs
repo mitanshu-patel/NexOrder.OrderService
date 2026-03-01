@@ -26,4 +26,12 @@ builder.Services.AddDbContext<OrdersContext>(
     v => v.UseSqlServer(configuration.GetConnectionString("SystemDbConnectionString"),
     b => b.MigrationsAssembly("NexOrder.OrderService.Infrastructure")));
 builder.Services.AddScoped<IOrderRepo, OrderRepo>();
-builder.Build().Run();
+var app = builder.Build();
+if (builder.Configuration.GetValue<bool>("RunMigration"))
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<OrdersContext>();
+    db.Database.Migrate();
+}
+
+app.Run();

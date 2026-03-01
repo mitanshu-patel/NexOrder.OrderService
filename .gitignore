@@ -18,3 +18,4 @@
 /NexOrder.OrderService.Application/obj/NexOrder.OrderService.Application.csproj.nuget.g.targets
 /NexOrder.OrderService.Application/obj/project.assets.json
 /NexOrder.OrderService.Application/obj/project.nuget.cache
+/local.env

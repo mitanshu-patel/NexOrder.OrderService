@@ -1,0 +1,33 @@
+networks:
+  nexorderorder-network:
+
+services:
+  nexorderordersql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: nexorderordersql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=db_password
+    ports:
+      - 1433:1433
+    volumes:
+      - nexorderordersql_data:/var/opt/mssql
+    networks:
+      - nexorderorder-network
+
+  nexorderorderapi:
+    build:
+      context: .
+      dockerfile: NexOrder.OrderService/Dockerfile
+    container_name: nexorderorderapi
+    env_file: local.env
+    ports:
+      - 7034:80
+    depends_on:
+      - nexorderordersql
+    networks:
+      - nexorderorder-network
+
+volumes:
+    nexorderordersql_data:
+      driver: local
