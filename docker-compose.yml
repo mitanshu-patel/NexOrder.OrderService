@@ -1,33 +1,33 @@
 networks:
-  nexorderorder-network:
-
+  nexorderorders-network:
 services:
-  nexorderordersql:
+  nexordersorderssql:
+    container_name: nexordersorderssql
     image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: nexorderordersql
-    env_file:
-     - local.env
-    ports:
-      - 1433:1433
-    volumes:
-      - nexorderordersql_data:/var/opt/mssql
-    networks:
-      - nexorderorder-network
-
-  nexorderorderapi:
-    build:
-      context: .
-      dockerfile: NexOrder.OrderService/Dockerfile
-    container_name: nexorderorderapi
     env_file:
       - local.env
     ports:
-      - 7034:80
-    depends_on:
-      - nexorderordersql
+      - 1433:1433
+    volumes:
+      - nexordersorderssql_data:/var/opt/mssql
     networks:
-      - nexorderorder-network
+      - nexorderorders-network
+
+  nexorder.orderservice:
+    container_name: nexorderorderservice
+    image: nexorderorderservice:1.1
+    build:
+      context: .
+      dockerfile: NexOrder.OrderService/Dockerfile
+    ports:
+      - 7024:80
+    env_file:
+      - local.env
+    depends_on:
+      - nexordersorderssql
+    networks:
+      - nexorderorders-network
 
 volumes:
-    nexorderordersql_data:
-      driver: local
+  nexordersorderssql_data:
+    driver: local

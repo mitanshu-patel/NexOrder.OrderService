@@ -8,11 +8,10 @@ using NexOrder.OrderService.Application;
 using NexOrder.OrderService.Application.Common;
 using NexOrder.OrderService.Application.Registrations;
 using NexOrder.OrderService.Infrastructure;
+using NexOrder.OrderService.Infrastructure.Helpers;
 using System.Configuration;
 
 var builder = FunctionsApplication.CreateBuilder(args);
-var configuration = new ConfigurationBuilder()
-                    .AddEnvironmentVariables().Build();
 
 builder.ConfigureFunctionsWebApplication();
 
@@ -23,7 +22,7 @@ builder.Services.RegisterHandlers();
 builder.Services.AddScoped<IMediator, Mediator>();
 
 builder.Services.AddDbContext<OrdersContext>(
-    v => v.UseSqlServer(configuration.GetConnectionString("SystemDbConnectionString"),
+    v => v.UseSqlServer(ConnectionStringsHelper.GetDbConnectionString(),
     b => b.MigrationsAssembly("NexOrder.OrderService.Infrastructure")));
 builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 var app = builder.Build();
