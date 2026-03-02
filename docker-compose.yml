@@ -23,6 +23,14 @@ services:
       - 7024:80
     env_file:
       - local.env
+      # Following config will be needed in local.env file:-
+        # DB_SERVER_NAME=nexordersorderssql
+        # ACCEPT_EULA=Y
+        # SA_PASSWORD=db_password
+        # DB_NAME=db_name
+        # DB_PASSWORD=db_password!
+        # ServiceBusConnectionString=connectionstring_for_servicebus
+        # RunMigration=true
     depends_on:
       - nexordersorderssql
     networks:
