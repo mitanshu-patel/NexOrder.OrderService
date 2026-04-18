@@ -4,22 +4,33 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NexOrder.Framework.Core;
+using NexOrder.Framework.Core.Common;
 using NexOrder.OrderService.Application;
-using NexOrder.OrderService.Application.Common;
-using NexOrder.OrderService.Application.Registrations;
 using NexOrder.OrderService.Infrastructure;
 using NexOrder.OrderService.Infrastructure.Helpers;
 using System.Configuration;
+using System.Reflection;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
+var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables()
+                    .Build();
+
+var environment = configuration.GetValue<string>("ENVIRONMENT");
+var isDevelopment = !string.IsNullOrEmpty(environment) && environment.Equals(
+            "DEVELOPMENT",
+            System.StringComparison.InvariantCultureIgnoreCase);
+
 builder.ConfigureFunctionsWebApplication();
 
-builder.Services
-    .AddApplicationInsightsTelemetryWorkerService()
-    .ConfigureFunctionsApplicationInsights();
-builder.Services.RegisterHandlers();
-builder.Services.AddScoped<IMediator, Mediator>();
+var appInsightsConnection = Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING");
+
+builder.Services.AddNexOrderCustomLogging(isDevelopment, "NexOrder.OrderService", appInsightsConnection);
+builder.Services.RegisterHandlers(Assembly.Load("NexOrder.OrderService.Application"));
+
 
 builder.Services.AddDbContext<OrdersContext>(
     v => v.UseSqlServer(ConnectionStringsHelper.GetDbConnectionString(),

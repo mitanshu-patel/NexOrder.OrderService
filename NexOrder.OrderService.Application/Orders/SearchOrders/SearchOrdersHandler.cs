@@ -2,10 +2,9 @@
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NexOrder.OrderService.Application.Common;
+using NexOrder.Framework.Core.Common;
 using NexOrder.OrderService.Application.Orders.SearchOrders.DTOs;
 using NexOrder.OrderService.Application.ProductStocks.SearchProductStocks;
-using NexOrder.OrderService.Shared.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -2,15 +2,7 @@
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NexOrder.OrderService.Application.Common;
-using NexOrder.OrderService.Application.Products.ManageRemoteProduct;
-using NexOrder.OrderService.Shared.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+using NexOrder.Framework.Core.Common;
 
 namespace NexOrder.OrderService.Application.Users.ManageRemoteUser
 {

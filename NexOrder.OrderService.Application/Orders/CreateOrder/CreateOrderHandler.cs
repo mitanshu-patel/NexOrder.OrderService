@@ -2,9 +2,8 @@
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NexOrder.OrderService.Application.Common;
+using NexOrder.Framework.Core.Common;
 using NexOrder.OrderService.Domain.Entities;
-using NexOrder.OrderService.Shared.Common;
 using NexOrder.OrderService.Shared.Enums;
 using System;
 using System.Collections.Generic;

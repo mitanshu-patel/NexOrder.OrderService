@@ -4,7 +4,8 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NexOrder.OrderService.Application.Common;
+using NexOrder.Framework.Core.Common;
+using NexOrder.Framework.Core.Contracts;
 using NexOrder.OrderService.Application.Orders.CreateOrder;
 using NexOrder.OrderService.Application.Orders.GetOrder;
 using NexOrder.OrderService.Application.Orders.SearchOrders;
@@ -12,7 +13,6 @@ using NexOrder.OrderService.Application.Orders.UpdateOrderStatus;
 using NexOrder.OrderService.Application.ProductStocks.GetProductStock;
 using NexOrder.OrderService.Application.ProductStocks.SaveProductStock;
 using NexOrder.OrderService.Application.ProductStocks.SearchProductStocks;
-using NexOrder.OrderService.Shared.Common;
 using System.Net;
 
 namespace NexOrder.OrderService;

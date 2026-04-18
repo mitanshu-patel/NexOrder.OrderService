@@ -1,8 +1,8 @@
 ﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using NexOrder.OrderService.Application.Common;
+using NexOrder.Framework.Core.Common;
+using NexOrder.Framework.Core.Contracts;
 using NexOrder.OrderService.Application.Products.ManageRemoteProduct;
-using NexOrder.OrderService.Shared.Common;
 using NexOrder.ProductService.Messages.Events;
 using System;
 using System.Collections.Generic;
