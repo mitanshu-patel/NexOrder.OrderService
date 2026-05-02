@@ -21,6 +21,8 @@ namespace NexOrder.OrderService.Domain.Entities
 
         public decimal TotalAmount { get; set; }
 
+        public Guid IdempotencyKey { get; set; }
+
         public List<OrderItem> OrderItems { get; set; } = [];
     }
 }

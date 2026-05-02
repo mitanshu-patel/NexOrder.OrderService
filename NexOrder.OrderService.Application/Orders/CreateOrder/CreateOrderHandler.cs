@@ -34,12 +34,20 @@ namespace NexOrder.OrderService.Application.Orders.CreateOrder
                                     .Select(v=> new { ProductStock = v, Price = v.Product.Price})
                                     .ToListAsync();
 
-
+                // We use this idempotency key check to prevent duplicate orders in case of retries with same key.
+                var orderExistWithIdempotencyKey = await this.orderRepo.GetOrders().AnyAsync(v => v.IdempotencyKey == command.IdempotencyKey);
                 var validationBuilder = ValidationErrorBuilder.Create();
+
+                if(orderExistWithIdempotencyKey)
+                {
+                    validationBuilder.AddObjectError("An order already exists with same Idempotency key");
+                }
+
                 var newOrder = new Order();
                 newOrder.UserId = command.Criteria.UserId;
                 newOrder.CreatedAtUtc = DateTime.UtcNow;
                 newOrder.Status = OrderStatus.Confirmed;
+                newOrder.IdempotencyKey = command.IdempotencyKey;
                 var totalAmount = 0m;
                 foreach (var item in command.Criteria.OrderItems)
                 {

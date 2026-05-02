@@ -17,7 +17,8 @@ namespace NexOrder.OrderService.Infrastructure.EntityConfigurations
             builder.HasKey(o => o.Id);
             builder.ToTable("Orders");
             builder.Property(v => v.TotalAmount).IsRequired();
-
+            builder.Property(v => v.IdempotencyKey).IsRequired().HasDefaultValue(Guid.NewGuid());
+            builder.HasIndex(v => v.IdempotencyKey);
             builder.HasOne(v => v.User).WithMany(t => t.Orders).HasForeignKey(o => o.UserId);
         }
     }

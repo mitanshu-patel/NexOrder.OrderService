@@ -78,6 +78,7 @@ public class OrderFunctions
     }
 
     [Function("AddNewOrder")]
+    [OrderIdempotency]
     [OpenApiOperation(operationId: "AddNewOrder", tags: new[] { "AddNewOrder" }, Description = "Add new order.")]
     [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(OrderCriteria))]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(CreateOrderResult))]
@@ -85,7 +86,8 @@ public class OrderFunctions
     {
         string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
         var data = JsonConvert.DeserializeObject<OrderCriteria>(requestBody);
-        var result = await this.mediator.SendAsync<CreateOrderCommand, CustomResponse<CreateOrderResult>>(new CreateOrderCommand(data));
+        var idempotencyKey = req.GetIdempotencyKey();
+        var result = await this.mediator.SendAsync<CreateOrderCommand, CustomResponse<CreateOrderResult>>(new CreateOrderCommand(data, idempotencyKey));
         return result.GetResponse();
     }
 

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NexOrder.Framework.Core;
 using NexOrder.Framework.Core.Common;
+using NexOrder.OrderService;
 using NexOrder.OrderService.Application;
 using NexOrder.OrderService.Infrastructure;
 using NexOrder.OrderService.Infrastructure.Helpers;
@@ -30,8 +31,16 @@ var appInsightsConnection = Environment.GetEnvironmentVariable("APPLICATIONINSIG
 
 builder.Services.AddNexOrderCustomLogging(isDevelopment, "NexOrder.OrderService", appInsightsConnection);
 builder.Services.RegisterHandlers(Assembly.Load("NexOrder.OrderService.Application"));
+var methodsWithAttribute = AppDomain.CurrentDomain
+    .GetAssemblies()
+    .SelectMany(a => a.GetTypes())
+    .SelectMany(t => t.GetMethods())
+    .Where(m => m.GetCustomAttributes(typeof(OrderIdempotencyAttribute), false).Any())
+    .Select(v=> $"{v.DeclaringType.FullName}.{v.Name}")
+    .ToList();
 
-
+builder.Services.AddSingleton(methodsWithAttribute);
+builder.UseMiddleware<OrderIdempotencyMiddleware>();
 builder.Services.AddDbContext<OrdersContext>(
     v => v.UseSqlServer(ConnectionStringsHelper.GetDbConnectionString(),
     b => b.MigrationsAssembly("NexOrder.OrderService.Infrastructure")));

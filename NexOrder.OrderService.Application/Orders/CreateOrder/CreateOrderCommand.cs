@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace NexOrder.OrderService.Application.Orders.CreateOrder
 {
-    public record CreateOrderCommand(OrderCriteria Criteria);
+    public record CreateOrderCommand(OrderCriteria Criteria, Guid IdempotencyKey);
 }
