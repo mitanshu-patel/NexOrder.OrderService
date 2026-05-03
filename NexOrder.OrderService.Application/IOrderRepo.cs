@@ -1,6 +1,8 @@
-﻿using NexOrder.OrderService.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using NexOrder.OrderService.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +11,8 @@ namespace NexOrder.OrderService.Application
 {
     public interface IOrderRepo
     {
+        public Task<IDbContextTransaction> BeginTransactionAsync();
+
         public IQueryable<Order> GetOrders();
 
         public Task SaveOrderAsync(Order order);
@@ -23,6 +27,8 @@ namespace NexOrder.OrderService.Application
 
         public IQueryable<RemoteProduct> GetRemoteProducts();
         public IQueryable<RemoteUser> GetRemoteUsers();
+
+        public Task<int> UpdateProductStockAsync(int productStockId, int requestedQuantity);
 
         public Task SaveProductStockAsync(ProductStock productStock);
 

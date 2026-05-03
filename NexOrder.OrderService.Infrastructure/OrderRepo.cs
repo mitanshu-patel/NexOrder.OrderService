@@ -1,4 +1,6 @@
-﻿using NexOrder.OrderService.Application;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using NexOrder.OrderService.Application;
 using NexOrder.OrderService.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -63,6 +65,13 @@ namespace NexOrder.OrderService.Infrastructure
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task<int> UpdateProductStockAsync(int productStockId, int requestedQuantity)
+        {
+            // We use this raw sql query to make sure the AvailableQuantity is updated atomically in the database.
+            return await dbContext.Database.ExecuteSqlRawAsync(@"UPDATE ProductStocks SET AvailableQuantity = AvailableQuantity - {0}, LastUpdatedAtUtc = {1} WHERE Id = {2} AND AvailableQuantity >= {0} AND AvailableQuantity - {0} >= 0",
+                requestedQuantity, DateTime.UtcNow, productStockId);
+        }
+
         public async Task SaveProductStockAsync(ProductStock productStock)
         {
             if (productStock.Id > 0)
@@ -87,6 +96,11 @@ namespace NexOrder.OrderService.Infrastructure
         {
             this.dbContext.RemoteUsers.Entry(remoteUser).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await dbContext.Database.BeginTransactionAsync();
         }
     }
 }
